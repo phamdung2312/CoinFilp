@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Inventory Management",
-  description: "Enterprise Inventory System",
+  title: "Coin Flip Game",
+  description: "Mô phỏng trò chơi tung đồng xu",
 };
 
 export default function RootLayout({
