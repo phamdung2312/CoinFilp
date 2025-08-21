@@ -30,7 +30,7 @@ export default function Coin({ isFlipping, result, onClick }: CoinProps) {
       >
         <div className="absolute w-full h-full rounded-full backface-hidden bg-gradient-to-br from-yellow-400 to-yellow-500 flex items-center justify-center border-8 border-yellow-600 shadow-xl">
           <span className="text-6xl font-bold text-yellow-800 drop-shadow-md">
-            X
+            S
           </span>
         </div>
         <div className="absolute w-full h-full rounded-full backface-hidden rotate-y-180 bg-gradient-to-br from-yellow-300 to-yellow-400 flex items-center justify-center border-8 border-yellow-600 shadow-xl">

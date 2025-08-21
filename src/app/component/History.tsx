@@ -65,7 +65,7 @@ export default function History({ history }: HistoryProps) {
                           : "bg-blue-100 text-blue-800"
                       }`}
                     >
-                      {item.result === "heads" ? "X" : "N"}
+                      {item.result === "heads" ? "S" : "N"}
                     </span>
                   </td>
                   <td className="py-2 px-3 text-sm text-gray-600">
