@@ -3,7 +3,7 @@
 interface ControlsProps {
   isFlipping: boolean;
   onFlip: (count: number) => void;
-  onMultiFlip: (count: number) => void;
+  onMultiFlip: () => void;
   flipCount: number;
   setFlipCount: (count: number) => void;
   onClearHistory: () => void;
@@ -33,8 +33,29 @@ export default function Controls({
 
       <div className="bg-white p-4 rounded-lg shadow-md">
         <h3 className="text-lg font-semibold text-purple-800 mb-2">
-          Xóc nhiều lần
+          Tung nhiều lần
         </h3>
+
+        <div className="mb-3">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Nhập số lần tung (tối đa 500):
+          </label>
+          <input
+            type="number"
+            min="1"
+            max="500"
+            value={flipCount}
+            onChange={(e) => {
+              const value = parseInt(e.target.value);
+              if (!isNaN(value) && value >= 1 && value <= 500) {
+                setFlipCount(value);
+              }
+            }}
+            className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+            disabled={isFlipping}
+          />
+        </div>
+
         <div className="flex items-center gap-2 mb-3">
           <input
             type="range"
@@ -49,8 +70,9 @@ export default function Controls({
             {flipCount}
           </span>
         </div>
+
         <button
-          onClick={() => onMultiFlip(flipCount)}
+          onClick={onMultiFlip}
           disabled={isFlipping || flipCount < 1}
           className={`w-full px-4 py-2 font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 ${
             isFlipping || flipCount < 1
@@ -58,7 +80,7 @@ export default function Controls({
               : "bg-blue-600 hover:bg-blue-700 text-white hover:shadow-md"
           }`}
         >
-          XÓC {flipCount} LẦN
+          TUNG {flipCount} LẦN
         </button>
       </div>
 

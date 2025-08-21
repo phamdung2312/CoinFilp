@@ -18,7 +18,7 @@ export default function Stats({ stats, history }: StatsProps) {
     <div className="w-full bg-white rounded-lg shadow-md p-4 mb-6">
       <h3 className="text-xl font-bold text-purple-800 mb-4">Thống kê</h3>
       <div className="flex justify-between mb-2">
-        <div className="text-green-600 font-semibold">Xấp: {stats.heads}</div>
+        <div className="text-green-600 font-semibold">Sấp: {stats.heads}</div>
         <div className="text-blue-600 font-semibold">Ngửa: {stats.tails}</div>
       </div>
       <div className="w-full bg-gray-200 rounded-full h-4 mb-2 overflow-hidden">
@@ -30,7 +30,7 @@ export default function Stats({ stats, history }: StatsProps) {
         ></div>
       </div>
       <div className="text-sm text-gray-600">
-        Tổng số lần tung: {total} • Xấp: {headsPercentage}% • Ngửa:{" "}
+        Tổng số lần tung: {total} • Sấp: {headsPercentage}% • Ngửa:{" "}
         {tailsPercentage}%
       </div>
     </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Head from "next/head";
 import { FlipResult, FlipStats, HistoryItem } from "../types";
 import Coin from "../component/Coin";
@@ -8,6 +8,12 @@ import Controls from "../component/Controls";
 import Stats from "../component/Stats";
 import History from "../component/History";
 import MultiFlip from "../component/MultiFlip";
+import dynamic from "next/dynamic";
+// import WelcomeMessage from "../component/WelcomeMessage";
+// import WelcomeMessage from "../component/WelcomeMessage";
+const WelcomeMessage = dynamic(() => import("../component/WelcomeMessage"), {
+  ssr: false,
+});
 
 export default function CoinFlip() {
   const [isFlipping, setIsFlipping] = useState(false);
@@ -17,6 +23,15 @@ export default function CoinFlip() {
   const [flipCount, setFlipCount] = useState(10);
   const [showMultiResults, setShowMultiResults] = useState(false);
   const [multiResults, setMultiResults] = useState<FlipResult[]>([]);
+  const [showWelcome, setShowWelcome] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowWelcome(false);
+    }, 5000); // Ẩn thông điệp chào mừng sau 5 giây
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const flipCoin = (count = 1) => {
     if (isFlipping) return;
@@ -77,7 +92,7 @@ export default function CoinFlip() {
         <meta name="description" content="Mô phỏng tung đồng xu" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
+      {showWelcome && <WelcomeMessage />} {/* Thêm dòng này */}
       <main className="flex flex-col items-center justify-center w-full max-w-md flex-1 text-center">
         <h1 className="text-4xl font-bold text-purple-800 mb-6 animate-pulse">
           Tung Đồng Xu
@@ -92,7 +107,7 @@ export default function CoinFlip() {
         {result && (
           <div className="mt-4 p-4 bg-white rounded-lg shadow-md mb-4 animate-fade-in">
             <h2 className="text-2xl font-bold text-purple-800">
-              Kết quả: {result === "heads" ? "Mặt XẤP" : "Mặt NGỬA"}
+              Kết quả: {result === "heads" ? "Mặt SẤP" : "Mặt NGỬA"}
             </h2>
           </div>
         )}
@@ -110,7 +125,6 @@ export default function CoinFlip() {
 
         <History history={history} />
       </main>
-
       <style jsx global>{`
         @keyframes rotate {
           0% {
@@ -180,6 +194,25 @@ export default function CoinFlip() {
           }
         }
 
+        @keyframes typing {
+          from {
+            width: 0;
+          }
+          to {
+            width: 100%;
+          }
+        }
+
+        @keyframes blink-caret {
+          from,
+          to {
+            border-color: transparent;
+          }
+          50% {
+            border-color: white;
+          }
+        }
+
         .animate-rotate {
           animation: rotate 3s cubic-bezier(0.4, 2.5, 0.6, 0.5) forwards;
         }
@@ -202,6 +235,13 @@ export default function CoinFlip() {
 
         .animate-pulse-once {
           animation: pulse-once 0.3s ease-out;
+        }
+
+        .animate-typing {
+          overflow: hidden;
+          white-space: nowrap;
+          animation: typing 3.5s steps(40, end),
+            blink-caret 0.75s step-end infinite;
         }
 
         .preserve-3d {

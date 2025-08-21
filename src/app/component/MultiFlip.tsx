@@ -72,7 +72,7 @@ export default function MultiFlip({
         <div className="p-4 border-t border-gray-200 bg-gray-50">
           <div className="flex justify-between text-sm">
             <span className="text-green-600 font-semibold">
-              Xấp: {results.filter((r) => r === "heads").length}
+              Sấp: {results.filter((r) => r === "heads").length}
             </span>
             <span className="text-blue-600 font-semibold">
               Ngửa: {results.filter((r) => r === "tails").length}
