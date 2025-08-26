@@ -8,12 +8,7 @@ import Controls from "../component/Controls";
 import Stats from "../component/Stats";
 import History from "../component/History";
 import MultiFlip from "../component/MultiFlip";
-import dynamic from "next/dynamic";
-// import WelcomeMessage from "../component/WelcomeMessage";
-// import WelcomeMessage from "../component/WelcomeMessage";
-const WelcomeMessage = dynamic(() => import("../component/WelcomeMessage"), {
-  ssr: false,
-});
+import WelcomeMessage from "../component/WelcomeMessage";
 
 export default function CoinFlip() {
   const [isFlipping, setIsFlipping] = useState(false);
