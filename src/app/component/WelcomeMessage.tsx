@@ -6,6 +6,22 @@ export default function WelcomeMessage() {
   const [visible, setVisible] = useState(true);
   const [showContent, setShowContent] = useState(false);
 
+  // Deterministic pseudo-random generator based on index to avoid
+  // hydration mismatches between server and client.
+  const pseudoRandom = (n: number) => {
+    // constants chosen to produce a varied fractional output
+    const x = Math.sin(n * 12.9898 + 78.233) * 43758.5453;
+    return x - Math.floor(x);
+  };
+
+  const stars = Array.from({ length: 50 }).map((_, i) => {
+    const top = `${(pseudoRandom(i * 7 + 1) * 100).toFixed(3)}%`; // đổi 6 -> 3
+    const left = `${(pseudoRandom(i * 11 + 3) * 100).toFixed(3)}%`; // đổi 6 -> 3
+    const animationDelay = `${(pseudoRandom(i * 13 + 5) * 3).toFixed(3)}s`;
+    const opacity = (pseudoRandom(i * 17 + 9) * 0.7 + 0.3).toFixed(3); // ép thành string
+    return { top, left, animationDelay, opacity };
+  });
+
   useEffect(() => {
     // Hiệu ứng xuất hiện nội dung sau một khoảng delay
     const contentTimer = setTimeout(() => {
@@ -30,15 +46,15 @@ export default function WelcomeMessage() {
       <div className="relative w-full h-full overflow-hidden">
         {/* Hiệu ứng nền sao */}
         <div className="absolute inset-0">
-          {[...Array(50)].map((_, i) => (
+          {stars.map((s, i) => (
             <div
               key={i}
               className="absolute w-1 h-1 bg-white rounded-full animate-twinkle"
               style={{
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                opacity: Math.random() * 0.7 + 0.3,
+                top: s.top,
+                left: s.left,
+                animationDelay: s.animationDelay,
+                opacity: s.opacity,
               }}
             ></div>
           ))}
