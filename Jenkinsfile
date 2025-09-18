@@ -37,6 +37,8 @@ pipeline {
                         git config user.email "jenkins@example.com"
                         git config user.name "Jenkins"
                         git remote set-url origin https://${GIT_USERNAME}:${GIT_TOKEN}@github.com/phamdung2312/CoinFilp.git
+                        git checkout main
+                        git pull origin main
                         sed -i 's|image: .*|image: ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${IMAGE_NAME}:${IMAGE_TAG}|' k8s/deployment.yaml
                         git add k8s/deployment.yaml
                         git commit -m "Update image tag to ${IMAGE_TAG}" || echo "No changes to commit"
