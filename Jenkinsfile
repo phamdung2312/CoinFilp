@@ -32,15 +32,15 @@ pipeline {
         }
         stage('Update Kubernetes Manifest') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'git-ssh-key', keyFileVariable: 'SSH_KEY')]) {
+                withCredentials([usernamePassword(credentialsId: 'github-pat', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_TOKEN')]) {
                     sh """
                         git config user.email "jenkins@example.com"
                         git config user.name "Jenkins"
-                        git remote set-url origin git@github.com:phamdung2312/CoinFilp.git
+                        git remote set-url origin https://${GIT_USERNAME}:${GIT_TOKEN}@github.com/phamdung2312/CoinFilp.git
                         sed -i 's|image: .*|image: ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${IMAGE_NAME}:${IMAGE_TAG}|' k8s/deployment.yaml
                         git add k8s/deployment.yaml
                         git commit -m "Update image tag to ${IMAGE_TAG}" || echo "No changes to commit"
-                        GIT_SSH_COMMAND="ssh -i \$SSH_KEY -o StrictHostKeyChecking=no" git push origin main
+                        git push origin main
                     """
                 }
             }
