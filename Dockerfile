@@ -1,4 +1,3 @@
-
 # Simple Dockerfile for Next.js app (no Prisma, no Sonar)
 FROM node:18-slim AS builder
 WORKDIR /app
