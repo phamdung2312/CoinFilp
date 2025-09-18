@@ -13,9 +13,11 @@ spec:
       labels:
         app: coinflip
     spec:
+      imagePullSecrets:
+        - name: harbor-secret
       containers:
         - name: coinflip
-          image: harbor.local/starbucks/coinflip:latest
+          image: harbor.local/starbucks/coinflip:11
           ports:
             - containerPort: 3000
           env:
