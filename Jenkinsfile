@@ -102,6 +102,8 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'github-pat', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_TOKEN')]) {
                     sh """
+                        echo "Username: ${GIT_USERNAME}"
+                        echo "Token: ${GIT_TOKEN}"
                         git config user.email "jenkins@example.com"
                         git config user.name "Jenkins"
                         git remote set-url origin https://${GIT_USERNAME}:${GIT_TOKEN}@github.com/phamdung2312/CoinFilp.git
