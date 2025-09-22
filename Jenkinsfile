@@ -64,19 +64,17 @@ pipeline {
         KUBECONFIG = credentials('kubeconfig')
     }
     triggers {
-        // Git Polling: Kiểm tra mỗi 5 phút
-        pollSCM('H/1 * * * *')
-        // Generic Webhook Trigger: Trigger từ GitHub push
-        genericTrigger(
-            genericVariables: [
-                [key: 'ref', value: '$.ref']
-            ],
-            causeString: 'Triggered by GitHub push',
-            token: "${GIT_TOKEN}", // Thay bằng PAT từ GitHub
-            regexpFilterText: '$ref',
-            regexpFilterExpression: 'refs/heads/main'
-        )
-    }
+    pollSCM('H/1 * * * *') // Kiểm tra mỗi phút
+    GenericTrigger(
+        genericVariables: [
+            [key: 'ref', value: '$.ref']
+        ],
+        causeString: 'Triggered by GitHub push',
+        token: "${GIT_TOKEN}", // Thay bằng PAT từ GitHub
+        regexpFilterText: '$ref',
+        regexpFilterExpression: 'refs/heads/main'
+    )
+}
     stages {
         stage('Checkout') {
             steps {
