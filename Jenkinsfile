@@ -72,7 +72,7 @@ pipeline {
                 [key: 'ref', value: '$.ref']
             ],
             causeString: 'Triggered by GitHub push',
-            token: ${GIT_TOKEN}, // Thay bằng PAT từ GitHub
+            token: "${GIT_TOKEN}", // Thay bằng PAT từ GitHub
             regexpFilterText: '$ref',
             regexpFilterExpression: 'refs/heads/main'
         )
