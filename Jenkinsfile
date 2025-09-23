@@ -30,7 +30,7 @@ pipeline {
                 }
             }
         }
-       stage('Update Kubernetes Manifest') {
+        stage('Update Kubernetes Manifest') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'github-pat', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_TOKEN')]) {
                     sh """
@@ -39,10 +39,15 @@ pipeline {
                         git remote set-url origin https://${GIT_USERNAME}:${GIT_TOKEN}@github.com/phamdung2312/CoinFilp.git
                         git checkout main
                         git pull origin main
-                        sed -i 's|image: .*|image: ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${IMAGE_NAME}:${IMAGE_TAG}|' k8s/deployment.yaml
-                        git add k8s/deployment.yaml
-                        git commit -m "Update image tag to ${IMAGE_TAG}" || echo "No changes to commit"
-                        git push origin main
+                        # Kiểm tra nếu image chưa đúng thì mới thay đổi
+                        if ! grep -q "${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${IMAGE_NAME}:${IMAGE_TAG}" k8s/deployment.yaml; then
+                            sed -i 's|image: .*|image: ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${IMAGE_NAME}:${IMAGE_TAG}|' k8s/deployment.yaml
+                            git add k8s/deployment.yaml
+                            git commit -m "Update image tag to ${IMAGE_TAG}"
+                            git push origin main
+                        else
+                            echo "Image tag ${IMAGE_TAG} already applied, no update needed"
+                        fi
                     """
                 }
             }
