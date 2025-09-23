@@ -76,7 +76,7 @@ export default function WelcomeMessage() {
                 fontFamily: "'Arial Black', sans-serif",
               }}
             >
-              CHÀO MỪNG BẠN NICK PHAM DŨNG TEST 4
+              CHÀO MỪNG BẠN NICK PHAM DŨNG TEST 5
             </h2>
 
             {/* Dòng chữ thứ hai */}
