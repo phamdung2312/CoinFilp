@@ -1,10 +1,11 @@
+# Deployment cho ứng dụng coinflip
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: coinflip
   namespace: default
 spec:
-  replicas: 3
+  replicas: 3 # Số pod mong muốn
   selector:
     matchLabels:
       app: coinflip
@@ -14,16 +15,39 @@ spec:
         app: coinflip
     spec:
       imagePullSecrets:
-        - name: harbor-secret
+        - name: harbor-secret # Bí mật để kéo image từ Harbor
       containers:
         - name: coinflip
-          image: harbor.local/starbucks/coinflip:59
+          # Sử dụng image với tag 'latest' để Argo CD tự động cập nhật
+          image: harbor.local/starbucks/coinflip:latest
           ports:
-            - containerPort: 3000
+            - containerPort: 3000 # Cổng ứng dụng Next.js
           env:
             - name: NODE_ENV
-              value: "production"
+              value: "production" # Môi trường production
+          # (Tùy chọn) Thêm liveness và readiness probe
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          # (Tùy chọn) Giới hạn tài nguyên
+          resources:
+            limits:
+              cpu: "0.5"
+              memory: "512Mi"
+            requests:
+              cpu: "0.2"
+              memory: "256Mi"
 ---
+# Service để expose ứng dụng
 apiVersion: v1
 kind: Service
 metadata:
@@ -33,21 +57,22 @@ spec:
   selector:
     app: coinflip
   ports:
-    - port: 80
-      targetPort: 3000
+    - port: 80 # Cổng dịch vụ
+      targetPort: 3000 # Cổng container
   type: ClusterIP
 ---
+# Ingress để định tuyến lưu lượng
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: coinflip-ingress
   namespace: default
   annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false" # Tắt redirect SSL
 spec:
   ingressClassName: nginx
   rules:
-    - host: coinflip.local
+    - host: coinflip.local # Tên miền tùy chỉnh
       http:
         paths:
           - path: /

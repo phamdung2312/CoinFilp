@@ -3,18 +3,22 @@ kind: Application
 metadata:
   name: coinflip
   namespace: argocd
+  annotations:
+    # Bật Argo Image Updater để tự động lấy tag latest
+    argocd-image-updater.argoproj.io/image-list: harbor.local/starbucks/coinflip
+    argocd-image-updater.argoproj.io/coinflip.update-strategy: latest
+    argocd-image-updater.argoproj.io/write-back-method: git # (Tùy chọn) Cập nhật Git
 spec:
   project: default
   source:
-    repoURL: https://github.com/phamdung2312/CoinFilp
-    targetRevision: HEAD
+    repoURL: "https://github.com/phamdung2312/CoinFilp.git"
     path: k8s
+    targetRevision: "main"
   destination:
-    server: https://kubernetes.default.svc
+    server: "https://kubernetes.default.svc"
     namespace: default
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
+  # Loại bỏ spec.images vì không hợp lệ nếu không có Image Updater
