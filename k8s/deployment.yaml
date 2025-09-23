@@ -17,7 +17,7 @@ spec:
         - name: harbor-secret
       containers:
         - name: coinflip
-          image: harbor.local/starbucks/coinflip:15
+          image: harbor.local/starbucks/coinflip:34
           ports:
             - containerPort: 3000
           env:
